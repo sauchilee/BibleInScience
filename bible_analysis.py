@@ -50,22 +50,16 @@ class NIV(object):
         # get chapters, distinguished by two new lines
         chapters_rx = re.compile(r'[\r\n]{0,}(.+?)[\r\n]{3}', re.DOTALL)
         chapters = re.findall(chapters_rx, base)
+        # prefer list over dict
         # chapters = dict(zip(chapters[0::2], chapters[1::2]))
-        chapters = chapters[1::2]
+        chapters = numpy.array(chapters[1::2])
 
         # create new and old testament:
-        # assume unique Chapter titles
-        old = u''
-        new = u''
-
         old_indices = range(0, 39)
         new_indices = range(39, len(chap_headlines))
 
-        for chapter in chap_headlines[old_indices]:
-            old = old + chapters[chapter]
-
-        for chapter in chap_headlines[new_indices]:
-            new = new + chapters[chapter]
+        old = '[\r\n]{3}'.join(chapters[old_indices])
+        new = '[\r\n]{3}'.join(chapters[new_indices])
 
         NIV.base = base
         NIV.old = old
@@ -78,4 +72,3 @@ class NIV(object):
 
 if __name__ == '__main__':
     NIV.read_in()
-    print(type(NIV.chap))
