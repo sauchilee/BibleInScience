@@ -5,9 +5,10 @@ import numpy
 
 class NIV(object):
     '''
-    Use only Class attributes and Class methods sdfsdfsf sdfsdfsdfsdfsd
-    sdfsdf sdfsdf sdfdssdfsdfsdfsdfsdf
+    Use only Class attributes and Class methods
     to achieve Singleton behaviour
+    NIV (converted to text with MS word using utf-16 encoding)
+    Source: www.godoor.net/download/bible/BibleNIV.doc
     '''
 
     base = None
