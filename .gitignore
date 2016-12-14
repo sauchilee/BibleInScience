@@ -1,7 +1,6 @@
 data/
 .DS_Store
 classes.py
-main.py
 niv.py
 *.pyc
 .ipynb_checkpoints/
