@@ -1,11 +1,5 @@
-import niv
+from bibles import NIV
+import nltk
 
-print(niv.NIV_BASE)
+NIV.read_in()
 
-niv.NIV_BASE = 'new'
-
-print(niv.NIV_BASE)
-
-niv.read_in()
-
-print(niv.NIV_BASE)

@@ -1,3 +1,5 @@
+# Python 3 no virtual environment
+
 from bibles import NIV
 from viz import *
 

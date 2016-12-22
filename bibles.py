@@ -1,3 +1,5 @@
+# Python 3?
+
 import codecs
 import re
 import numpy
