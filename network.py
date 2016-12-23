@@ -1,7 +1,8 @@
 # TODOS
-# given a dictionary of names: create a graph
+# given a dictionary of names: create a graph OK
+# build dictionary on your own OK
+# test performance on Bible
 # make visualisation
-# build dictionary on your own
 # include sentiments of sentences
 # adjust size of bubbles
 
