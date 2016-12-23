@@ -1,4 +1,6 @@
 data/
+libs/
+*.csv
 .DS_Store
 classes.py
 niv.py

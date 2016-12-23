@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+  <script src="libs/d3/3.5.14/d3.js"></script>
+<style>
+
+path.link {
+  fill: none;
+  stroke: #666;
+  stroke-width: 1.5px;
+}
+
+circle {
+  fill: #000099;
+  stroke: #fff;
+  stroke-width: 0.0px;
+}
+
+text {
+  fill: #000;
+  font: 8px sans-serif;
+  pointer-events: none;
+}
+
+.node:hover text {
+  display: inline;
+}
+
+.node text {
+  display: none;
+  font: 8px sans-serif;
+}
+
+#wrapper {
+  height: 95vh;
+  width: 95vw;
+  border: 1pt solid black;
+  margin: auto;
+}
+
+
+</style>
+<body>
+<script>
+// BASED ON http://bl.ocks.org/d3noob/5141278
+// http://bl.ocks.org/dustinlarimer/5888271
+// TODO make dynamic range
+var color = d3.scale.linear()
+    .domain([0, 1])
+    .range(["#ffeda0", "#f03b20"]);
+
+
+// get the data
+d3.csv("network_data.csv", function(error, links) {
+
+var nodes = {};
+
+// Compute the distinct nodes from the links.
+links.forEach(function(link) {
+    link.source = nodes[link.source] || 
+        (nodes[link.source] = {name: link.source, scale: link.scale});
+    link.target = nodes[link.target] || 
+        (nodes[link.target] = {name: link.target, scale: link.scale});
+});
+
+var width = document.getElementById('wrapper').offsetWidth,
+    height = document.getElementById('wrapper').offsetHeight;
+
+var force = d3.layout.force()
+    .nodes(d3.values(nodes))
+    .links(links)
+    .size([width, height])
+    .linkDistance(60)
+    .charge(-300)
+    .on("tick", tick)
+    .start();
+
+var svg = d3.select("#wrapper").append("svg")
+    .attr("width", '100%')
+    .attr("height", '100%');
+
+// build the arrow.
+svg.append("svg:defs").selectAll("marker")
+    .data(force.links())      // Different link/path types can be defined here
+  .enter()
+  .append("svg:marker")    // This section adds in the arrows
+    .attr("id", function(d){ return 'marker_' + d.target.name;})
+    .attr("viewBox", "0 -5 10 10")
+    .attr("refX", function(d){console.log(d.target.weight);return d.target.weight + 10;})
+    .attr("refY", 0)
+    .attr("markerWidth", 4)
+    .attr("markerHeight", 4)
+    .attr("markerUnits", "userSpaceOnUse")
+    .attr("orient", "auto")
+  .append("svg:path")
+  .attr("d", "M0,-5L10,0L0,5");
+
+// add the links and the arrows
+var path = svg.append("svg:g").selectAll("path")
+    .data(force.links())
+  .enter().append("svg:path")
+//    .attr("class", function(d) { return "link " + d.type; })
+    .style("stroke-width", function(d) { return d.elasticity * 5 + 0.5; })
+    //.attr("style", "stroke: red; stroke-width: 1px; fill: none;")
+    .style('opacity', 0.5)
+    .attr("class", "link")
+    .attr("marker-end", function(d,i){ return 'url(#marker_' + d.target.name  + ')' });
+
+// define the nodes
+var node = svg.selectAll(".node")
+    .data(force.nodes())
+  .enter().append("g")
+    .attr("class", "node")
+    .attr("scale", function(d) {  return d.scale;  })
+    .call(force.drag);
+
+// add the nodes
+node.append("circle")
+    .attr("r", function(d) { return d.weight/5; })
+    //.attr("color", "red");
+    .style("fill", function(d){ return color(d.scale); });
+
+// add the text 
+node.append("text")
+    .attr("x", 6)
+    .attr("dy", ".10em")
+    .text(function(d) { return d.name; });
+
+// add the curvy lines
+function tick() {
+    path.attr("d", function(d) {
+        var dx = d.target.x - d.source.x,
+            dy = d.target.y - d.source.y,
+            dr = Math.sqrt(dx * dx + dy * dy);
+        return "M" + 
+            d.source.x + "," + 
+            d.source.y + "A" + 
+            dr + "," + dr + " 0 0,1 " + 
+            d.target.x + "," + 
+            d.target.y;
+    });
+
+    node
+        .attr("transform", function(d) { 
+        return "translate(" + d.x + "," + d.y + ")"; });
+}
+
+});
+
+</script>
+<div id="wrapper"></div>
+</body>
+</html>

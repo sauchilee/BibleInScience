@@ -1,7 +1,7 @@
 # TODOS
 # given a dictionary of names: create a graph OK
 # build dictionary on your own OK
-# test performance on Bible
+# test performance on Bible OK
 # make visualisation
 # include sentiments of sentences
 # adjust size of bubbles
@@ -76,7 +76,7 @@ def find_twofold_subsets(set_or_list):
 
 def build_name_list(tagged_string):
     names = extract_names(tagged_string)
-    return Counter(names)
+    return Counter(names, sort=True)
 
 def clean_names(tagged_string, dict_):
     # format: {clean_name: [alternative_name1, alternativ_name2, ...]}
@@ -104,7 +104,7 @@ def build_network(tagged_string):
 
 
 if __name__ == '__main__':
-    test = "Philipp Dufter and Johanna are on holiday. They meet Josef. Josef and Philipp then drink a beer. Johanna calls Katrin and Eckart. Philipp Dufter and Johanna. Phil goes."
+    test = "Philipp Dufter and Johanna are on holiday. They meet Josef. Josef and Philipp then drink a beer. Johanna calls Katrin and Eckart. Philipp Dufter and Johanna. Phil goes. Joshua son of Nun eats breakfast."
     #t = time()
     #print (tag_names_if(tokenize_words(test), ['Philipp', 'Johanna']))
     #print(time() - t)
@@ -112,6 +112,8 @@ if __name__ == '__main__':
     #print (tag_names_regex(test, ['Philipp', 'Johanna', 'Dufter']))
     #print(time() - t)
     result = clean_tags(tag_names_ner(test))
+    raw = tag_names_ner(test)
+    print(raw)
     # print(tokenize_sentence(merge_longer_names(standardise_tags(result[0], result[1]))))
     # print(build_name_list(merge_longer_names(standardise_tags(result[0], result[1]))))
     print(build_network(clean_names(result, {"Philipp": ["Philipp Dufter", "Phil"]})))
