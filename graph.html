@@ -6,7 +6,7 @@
 path.link {
   fill: none;
   stroke: #666;
-  stroke-width: 1.5px;
+  stroke-width: 5px;
 }
 
 circle {
@@ -17,7 +17,7 @@ circle {
 
 text {
   fill: #000;
-  font: 8px sans-serif;
+  font: 15px sans-serif;
   pointer-events: none;
 }
 
@@ -27,7 +27,12 @@ text {
 
 .node text {
   display: none;
-  font: 8px sans-serif;
+  font: 15px sans-serif;
+}
+
+.textWrapper {
+  background-color: white;
+  width: auto;
 }
 
 #wrapper {
@@ -79,6 +84,7 @@ var svg = d3.select("#wrapper").append("svg")
     .attr("height", '100%');
 
 // build the arrow.
+/*
 svg.append("svg:defs").selectAll("marker")
     .data(force.links())      // Different link/path types can be defined here
   .enter()
@@ -93,7 +99,7 @@ svg.append("svg:defs").selectAll("marker")
     .attr("orient", "auto")
   .append("svg:path")
   .attr("d", "M0,-5L10,0L0,5");
-
+*/
 // add the links and the arrows
 var path = svg.append("svg:g").selectAll("path")
     .data(force.links())
@@ -102,8 +108,8 @@ var path = svg.append("svg:g").selectAll("path")
     .style("stroke-width", function(d) { return d.elasticity * 5 + 0.5; })
     //.attr("style", "stroke: red; stroke-width: 1px; fill: none;")
     .style('opacity', 0.5)
-    .attr("class", "link")
-    .attr("marker-end", function(d,i){ return 'url(#marker_' + d.target.name  + ')' });
+    .attr("class", "link");
+    //.attr("marker-end", function(d,i){ return 'url(#marker_' + d.target.name  + ')' });
 
 // define the nodes
 var node = svg.selectAll(".node")
@@ -115,12 +121,15 @@ var node = svg.selectAll(".node")
 
 // add the nodes
 node.append("circle")
-    .attr("r", function(d) { return d.weight/5; })
+    .attr("r", function(d) { return d.weight; })
     //.attr("color", "red");
     .style("fill", function(d){ return color(d.scale); });
 
 // add the text 
-node.append("text")
+node.append("div")
+    .attr("class", "textWrapper")
+node.selectAll(".textWrapper")
+    .append("text")
     .attr("x", 6)
     .attr("dy", ".10em")
     .text(function(d) { return d.name; });
