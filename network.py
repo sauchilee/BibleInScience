@@ -109,7 +109,7 @@ def save_network(counter_of_edges, use_top_n=100, filename=False):
     network_df.drop('index', axis=1, inplace=True)
     network_df.rename(columns={0: 'value'}, inplace=True)
     network_df.sort_values('value', ascending=False, inplace=True)
-    if filename is True:
+    if filename is not False:
         network_df[:use_top_n].to_csv(filename + '.csv', index=False)
     return network_df[['source', 'target', 'value']]
 
